@@ -1,4 +1,4 @@
-setwd("C:/Users/vn38fiva/Desktop/chapter 3/chap3analysis/chap3")
+setwd()
 
 library(vegan)
 library(betapart)
@@ -13,22 +13,16 @@ library(fitdistrplus)
 # Make community matrix ---------------------------------------------------
 
 #make a community matrix, plotwise, sitewise and landusewise
-dt <- read.csv("plotwise.csv")
-dt <- read.csv("plotcount.csv")
+dt <- read.csv("counts.csv")
 
-com_mat<- as.data.frame.matrix(table(dt$Site, dt$Species)) #Sitewise
+commat<- as.data.frame.matrix(table(dt$code, dt$Species)) 
 
-com_mat2<- as.data.frame.matrix(table(dt$Plotcode, dt$Species)) #Plotwise
-
-write.csv(com_mat, file="sitecommat.csv")
-write.csv(com_mat2, file="plotcommat.csv")
-
+write.csv(commat, file="commat.csv")
 
 # NMDS ------------------------------------------------
 
 #Read community matrix
-#abund<-read.csv2("commatrix.csv", sep=",")
-abund<-read.csv2("commat2.csv", sep=",")
+abund<-read.csv2("commat.csv", sep=",")
 
 set.seed(321)
 abund.mds <- metaMDS(abund[,3:33],try = 999) ##creates a Bray Curtis dissimilarity/distance matrix
@@ -69,9 +63,6 @@ anosim(BC.dist, abund$Landuse, permutations = 1000)
 #betapart
 dist<-bray.part(abund[,3:33])
 bd <- beta.multi.abund(dist[[3]], index.family="bray")
-bd
-bd <- beta.sample.abund(abund[,3:33], index.family="bray")
-
 
 abund1 <- abund[1:9,]
 abund2 <- abund[10:18,]
